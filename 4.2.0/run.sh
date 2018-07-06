@@ -25,14 +25,15 @@ function launch_name_server() {
 
 }
 
-if [[ "${BROKER_SERVER_A}" == "true" ]]; then
-  launch_broker_server "a"
-  exit 0
-fi
-
-if [[ "${BROKER_SERVER_B}" == "true" ]]; then
-  launch_broker_server "b"
-  exit 0
+if [[ "${BROKER_SERVER}" == "true" ]]; then
+  if [[ x"${BROKER_IDX}" == "0" ]]; then
+    launch_broker_server "a"
+  elif [[ x"${BROKER_IDX}" == "1" ]]; then
+    launch_broker_server "b"
+  else
+    echo "invalid BROCKER_IDX"
+    exit 1
+  fi
 fi
 
 if [[ "${NAME_SERVER}" == "true" ]]; then
