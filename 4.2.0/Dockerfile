@@ -13,7 +13,7 @@ ENV ROCKETMQ_HOME  /opt/rocketmq-${ROCKETMQ_VERSION}
 WORKDIR  ${ROCKETMQ_HOME}
 
 # Expose
-EXPOSE 10909 10911
+EXPOSE 10909 10911 9876
 
 # Volume
 RUN mkdir -p /opt/logs /opt/store
