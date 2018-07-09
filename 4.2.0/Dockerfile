@@ -20,13 +20,16 @@ RUN mkdir -p /opt/logs /opt/store
 VOLUME /opt/logs /opt/store
 
 # Files
-ADD run.sh .
 
 RUN curl https://dist.apache.org/repos/dist/release/rocketmq/${ROCKETMQ_VERSION}/rocketmq-all-${ROCKETMQ_VERSION}-bin-release.zip -o rocketmq.zip \
           && unzip rocketmq.zip \
           && rm rocketmq.zip
 
 RUN chmod +x bin/mqbroker bin/mqnamesrv
+
+ADD run.sh .
+
+ADD runbroker.sh bin/ 
 
 # Final Command
 CMD [ "./run.sh" ]
