@@ -89,11 +89,8 @@ if [[ x"${BROKER_SERVER}" == x"true" ]]; then
     echo "launch broker as single"
     launch_broker_cluster_server "./conf/broker.conf"
   else
-    if [[ x"${BROKER_CLUSTER_IDX}" == x"" ]]; then
-      echo "invalid BROKER_CLUSTER_IDX"
-      exit 1
-    fi
     echo "launch broker as cluster"
+    BROKER_CLUSTER_IDX=${HOSTNAME##*-}
     BROKER_CLUSTER_ID=$(get_broker_cluster_id $BROKER_CLUSTER_CONF $BROKER_CLUSTER_IDX) 
     launch_broker_cluster_server "./conf/${BROKER_CLUSTER_CONF}/broker-${BROKER_CLUSTER_ID}.properties"
   fi
