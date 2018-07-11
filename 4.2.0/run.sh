@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # pwd and env 
-export JAVA_OPT=" -Duser.home=/opt"
+export JAVA_OPT=" -Duser.home=/opt/rocketmq_home"
 
 function launch_broker_cluster_server() {
 

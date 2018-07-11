@@ -16,8 +16,8 @@ WORKDIR  ${ROCKETMQ_HOME}
 EXPOSE 10909 10911 9876
 
 # Volume
-RUN mkdir -p /opt/logs /opt/store
-VOLUME /opt/logs /opt/store
+RUN mkdir -p /opt/rocketmq_home/logs /opt/rocketmq_home/store
+VOLUME /opt/rocketmq_home
 
 # Files
 
