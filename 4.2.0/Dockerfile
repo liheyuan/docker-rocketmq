@@ -1,5 +1,5 @@
 # Start from a Java image.
-FROM java:8
+FROM openjdk:8
 
 ARG version
 
