@@ -3,34 +3,39 @@ FROM java:8
 
 ARG version
 
-# Rocketmq Version
+# RocketMQ Version
 ENV ROCKETMQ_VERSION 4.2.0 
-
-# Rocketmq Home
-ENV ROCKETMQ_HOME  /opt/rocketmq-${ROCKETMQ_VERSION}
-
-# Work Dir
-WORKDIR  ${ROCKETMQ_HOME}
 
 # Expose
 EXPOSE 10909 10911 9876
 
-# Volume
-RUN mkdir -p /opt/rocketmq_home/logs /opt/rocketmq_home/store
-VOLUME /opt/rocketmq_home
+# RocketMQ Home
+ENV ROCKETMQ_HOME  /opt/rocketmq-${ROCKETMQ_VERSION}
 
 # Files
-
+WORKDIR ${ROCKETMQ_HOME}
 RUN curl https://dist.apache.org/repos/dist/release/rocketmq/${ROCKETMQ_VERSION}/rocketmq-all-${ROCKETMQ_VERSION}-bin-release.zip -o rocketmq.zip \
           && unzip rocketmq.zip \
           && rm rocketmq.zip
 
-RUN chmod +x bin/mqbroker bin/mqnamesrv
+# Add Custom script
+COPY scripts/ ${ROCKETMQ_HOME}/bin/
 
-ADD run.sh .
+RUN ls ${ROCKETMQ_HOME}/bin
+RUN mv ${ROCKETMQ_HOME}/bin/runserver-customize.sh ${ROCKETMQ_HOME}/bin/runserver.sh \
+ && chmod +x ${ROCKETMQ_HOME}/bin/runserver.sh \
+ && chmod +x ${ROCKETMQ_HOME}/bin/mqnamesrv
 
-ADD runbroker.sh bin/ 
+RUN mv ${ROCKETMQ_HOME}/bin/runbroker-customize.sh ${ROCKETMQ_HOME}/bin/runbroker.sh \
+ && chmod +x ${ROCKETMQ_HOME}/bin/runbroker.sh \
+ && chmod +x ${ROCKETMQ_HOME}/bin/mqbroker
 
-# Final Command
-CMD [ "./run.sh" ]
+# RocketMQ Data
+ENV ROCKETMQ_DATA  /rocketmq_data
 
+RUN mkdir -p ${ROCKETMQ_DATA}/logs ${ROCKETMQ_DATA}/store
+VOLUME ${ROCKETMQ_DATA}
+RUN export JAVA_OPT=" -Duser.home=/rocketmq_data"
+
+# RocketMQ WorkDIR
+WORKDIR ${ROCKETMQ_HOME}/bin
