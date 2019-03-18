@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 #===========================================================================================
 # Java Environment Setting
 #===========================================================================================
@@ -32,6 +33,15 @@ export JAVA_HOME
 export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=$(dirname $0)/..
 export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
+
+#===========================================================================================
+# Mutiple-Master Setting
+#===========================================================================================
+if [ -n "$MM_BROKER_ID" ]
+then
+	mv $BASE_DIR/conf/broker_mm.properties $BASE_DIR/broker.properties
+	sed -i "s/broker_mm/$MM_BROKER_ID/g" $BASE_DIR/broker.properties
+fi
 
 #===========================================================================================
 # JVM Configuration
