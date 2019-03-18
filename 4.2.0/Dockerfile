@@ -30,12 +30,5 @@ RUN mv ${ROCKETMQ_HOME}/bin/runbroker-customize.sh ${ROCKETMQ_HOME}/bin/runbroke
  && chmod +x ${ROCKETMQ_HOME}/bin/runbroker.sh \
  && chmod +x ${ROCKETMQ_HOME}/bin/mqbroker
 
-# RocketMQ Data
-ENV ROCKETMQ_DATA  /rocketmq_data
-
-RUN mkdir -p ${ROCKETMQ_DATA}/logs ${ROCKETMQ_DATA}/store
-VOLUME ${ROCKETMQ_DATA}
-RUN export JAVA_OPT=" -Duser.home=/rocketmq_data"
-
 # RocketMQ WorkDIR
 WORKDIR ${ROCKETMQ_HOME}/bin
