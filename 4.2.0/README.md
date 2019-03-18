@@ -1,5 +1,6 @@
 ## How To Run Broker
 ```
+# Max Heap = 8GB
 docker run \
     --env MAX_POSSIBLE_HEAP=8589934592 \
     --volume "your_path_log":/root/logs \
@@ -11,8 +12,9 @@ docker run \
 
 ## How To Run NameServer 
 ```
+# Max Heap = 8GB
 docker run \
-    --env MAX_POSSIBLE_HEAP=4294967296 \
+    --env MAX_POSSIBLE_HEAP=8589934592 \
     --volume "your_path_log":/root/logs \
     --volume "your_path_store":/root/store \
     -p 9876:9876 \
