@@ -15,21 +15,22 @@ ENV ROCKETMQ_HOME  /opt/rocketmq-${ROCKETMQ_VERSION}
 # Files
 WORKDIR ${ROCKETMQ_HOME}
 RUN curl https://dist.apache.org/repos/dist/release/rocketmq/${ROCKETMQ_VERSION}/rocketmq-all-${ROCKETMQ_VERSION}-bin-release.zip -o rocketmq.zip \
-          && unzip rocketmq.zip \
-          && rm rocketmq.zip
+    && unzip rocketmq.zip \
+    && mv rocketmq-all*/* . \
+    && rmdir rocketmq-all*  \
+    && rm rocketmq.zip
 
 # Add Custom script
 COPY scripts/ ${ROCKETMQ_HOME}/bin/
 COPY mm/ ${ROCKETMQ_HOME}/conf/
 
-RUN ls ${ROCKETMQ_HOME}/bin
 RUN mv ${ROCKETMQ_HOME}/bin/runserver-customize.sh ${ROCKETMQ_HOME}/bin/runserver.sh \
- && chmod +x ${ROCKETMQ_HOME}/bin/runserver.sh \
- && chmod +x ${ROCKETMQ_HOME}/bin/mqnamesrv
+   && chmod +x ${ROCKETMQ_HOME}/bin/runserver.sh \
+   && chmod +x ${ROCKETMQ_HOME}/bin/mqnamesrv
 
 RUN mv ${ROCKETMQ_HOME}/bin/runbroker-customize.sh ${ROCKETMQ_HOME}/bin/runbroker.sh \
- && chmod +x ${ROCKETMQ_HOME}/bin/runbroker.sh \
- && chmod +x ${ROCKETMQ_HOME}/bin/mqbroker
+   && chmod +x ${ROCKETMQ_HOME}/bin/runbroker.sh \
+   && chmod +x ${ROCKETMQ_HOME}/bin/mqbroker
 
 # RocketMQ WorkDIR
 WORKDIR ${ROCKETMQ_HOME}/bin
