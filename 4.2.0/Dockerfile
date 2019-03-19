@@ -22,7 +22,6 @@ RUN curl https://dist.apache.org/repos/dist/release/rocketmq/${ROCKETMQ_VERSION}
 COPY scripts/ ${ROCKETMQ_HOME}/bin/
 COPY mm/ ${ROCKETMQ_HOME}/conf/
 
-RUN ls ${ROCKETMQ_HOME}/bin
 RUN mv ${ROCKETMQ_HOME}/bin/runserver-customize.sh ${ROCKETMQ_HOME}/bin/runserver.sh \
  && chmod +x ${ROCKETMQ_HOME}/bin/runserver.sh \
  && chmod +x ${ROCKETMQ_HOME}/bin/mqnamesrv
