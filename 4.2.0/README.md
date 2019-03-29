@@ -31,7 +31,7 @@ docker run \
     --volume "your_path_store":/root/store \
     -p 10911:10911 \
     -p 10909:10909 \
-    coder4/rocketmq:4.2.0 sh mqbroker
+    coder4/rocketmq:4.2.0 sh mqbroker -c ../conf/broker.conf
 
 # Broker2
 docker run \
@@ -41,7 +41,7 @@ docker run \
     --volume "your_path_store":/root/store \
     -p 10911:10911 \
     -p 10909:10909 \
-    coder4/rocketmq:4.2.0 sh mqbroker
+    coder4/rocketmq:4.2.0 sh mqbroker -c ../conf/broker.conf
 
 ```
 
