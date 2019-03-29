@@ -39,12 +39,12 @@ export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
 #===========================================================================================
 if [ -n "$MM_BROKER_ID" ]
 then
-	mv $BASE_DIR/conf/broker_mm.properties $BASE_DIR/broker.properties
-	sed -i "s/broker_mm/$MM_BROKER_ID/g" $BASE_DIR/broker.properties
+	mv $BASE_DIR/conf/broker_mm.properties $BASE_DIR/conf/broker.properties
+	sed -i "s/broker_mm/$MM_BROKER_ID/g" $BASE_DIR/conf/broker.properties
 
         if [ -n "$MM_BROKER_IP" ]
         then
-                echo "brokerIP1=$MM_BROKER_IP" >> $BASE_DIR/broker.properties
+                echo "brokerIP1=$MM_BROKER_IP" >> $BASE_DIR/conf/broker.properties
         fi
 fi
 
