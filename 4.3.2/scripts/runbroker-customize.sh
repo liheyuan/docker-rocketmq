@@ -41,6 +41,12 @@ if [ -n "$MM_BROKER_ID" ]
 then
 	mv $BASE_DIR/conf/broker_mm.properties $BASE_DIR/broker.properties
 	sed -i "s/broker_mm/$MM_BROKER_ID/g" $BASE_DIR/broker.properties
+
+	if [ -n "$MM_BROKER_IP" ]
+	then
+		echo "brokerIP1=$MM_BROKER_IP" >> $BASE_DIR/broker.properties
+	fi
+
 fi
 
 #===========================================================================================

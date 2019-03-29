@@ -26,6 +26,7 @@ docker run \
 # Broker1
 docker run \
     --env MM_BROKER_ID=broker1 \
+    --env MM_BROKER_IP=192.168.0.1 \
     --volume "your_path_log":/root/logs \
     --volume "your_path_store":/root/store \
     -p 10911:10911 \
@@ -35,6 +36,7 @@ docker run \
 # Broker2
 docker run \
     --env MM_BROKER_ID=broker2 \
+    --env MM_BROKER_IP=192.168.0.2 \
     --volume "your_path_log":/root/logs \
     --volume "your_path_store":/root/store \
     -p 10911:10911 \
