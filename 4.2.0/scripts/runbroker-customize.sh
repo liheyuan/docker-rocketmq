@@ -51,7 +51,7 @@ fi
 #===========================================================================================
 # JVM Configuration
 #===========================================================================================
-# Get the max heap used by a jvm, which used all the ram available to the container.
+# Get the max heap used by a jvm, which used 80% of all the ram available to the container.
 if [ -z "$MAX_POSSIBLE_HEAP" ]
 then
 	MAX_POSSIBLE_RAM_STR=$(java -XX:+UnlockExperimentalVMOptions -XX:MaxRAMFraction=1 -XshowSettings:vm -version 2>&1 | awk '/Max\. Heap Size \(Estimated\): [0-9KMG]+/{ print $5}')
@@ -65,7 +65,7 @@ then
 	elif [ "$CAL_UNIT" = "K" -o "$CAL_UNIT" = "k" ]; then
 		MAX_POSSIBLE_RAM=$(echo $MAX_POSSIBLE_RAM_NUM `expr 1 \* 1024` | awk '{printf "%d",$1*$2}')
 	fi
-	MAX_POSSIBLE_HEAP=$((MAX_POSSIBLE_RAM/4))
+	MAX_POSSIBLE_HEAP=$((MAX_POSSIBLE_RAM/5*4))
 fi
 
 # Dynamically calculate parameters, for reference.
