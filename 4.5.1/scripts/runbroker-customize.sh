@@ -42,12 +42,14 @@ then
 	mv $BASE_DIR/conf/broker_mm.properties $BASE_DIR/conf/broker.conf
 	sed -i "s/broker_mm/$MM_BROKER_ID/g" $BASE_DIR/conf/broker.conf
 
+
 fi
 
 if [ -n "$MM_BROKER_IP" ]
 then
 	echo "brokerIP1=$MM_BROKER_IP" >> $BASE_DIR/conf/broker.conf
 fi
+
 #===========================================================================================
 # JVM Configuration
 #===========================================================================================
@@ -68,6 +70,7 @@ then
 	MAX_POSSIBLE_HEAP=$((MAX_POSSIBLE_RAM/5*4))
 fi
 
+
 # Dynamically calculate parameters, for reference.
 Xms=$((MAX_POSSIBLE_HEAP/4))
 Xmx=$MAX_POSSIBLE_HEAP
@@ -79,7 +82,7 @@ if [ "$MAX_POSSIBLE_HEAP" -lt "3221225472" ];then
 	# If Heap Size < 3GB, Let G1 Determine Best Param 
 	JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC"
 else
-	JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8"
+	JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0"
 fi	
 JAVA_OPT="${JAVA_OPT} -verbose:gc -Xloggc:/dev/shm/mq_gc_%p.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationStoppedTime -XX:+PrintAdaptiveSizePolicy"
 JAVA_OPT="${JAVA_OPT} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=30m"

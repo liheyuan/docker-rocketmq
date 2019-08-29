@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 #===========================================================================================
 # Java Environment Setting
 #===========================================================================================
@@ -34,20 +33,6 @@ export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=$(dirname $0)/..
 export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
 
-#===========================================================================================
-# Mutiple-Master Setting
-#===========================================================================================
-if [ -n "$MM_BROKER_ID" ]
-then
-	mv $BASE_DIR/conf/broker_mm.properties $BASE_DIR/conf/broker.conf
-	sed -i "s/broker_mm/$MM_BROKER_ID/g" $BASE_DIR/conf/broker.conf
-
-fi
-
-if [ -n "$MM_BROKER_IP" ]
-then
-	echo "brokerIP1=$MM_BROKER_IP" >> $BASE_DIR/conf/broker.conf
-fi
 #===========================================================================================
 # JVM Configuration
 #===========================================================================================
@@ -69,37 +54,18 @@ then
 fi
 
 # Dynamically calculate parameters, for reference.
-Xms=$((MAX_POSSIBLE_HEAP/4))
+Xms=$((MAX_POSSIBLE_HEAP/2))
 Xmx=$MAX_POSSIBLE_HEAP
 Xmn=$((MAX_POSSIBLE_HEAP/2))
-MaxDirectMemorySize=$((MAX_POSSIBLE_HEAP/8))
 # Set for `JAVA_OPT`.
 JAVA_OPT="${JAVA_OPT} -server -Xms${Xms} -Xmx${Xmx} -Xmn${Xmn}"
-if [ "$MAX_POSSIBLE_HEAP" -lt "3221225472" ];then
-	# If Heap Size < 3GB, Let G1 Determine Best Param 
-	JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC"
-else
-	JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8"
-fi	
-JAVA_OPT="${JAVA_OPT} -verbose:gc -Xloggc:/dev/shm/mq_gc_%p.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationStoppedTime -XX:+PrintAdaptiveSizePolicy"
-JAVA_OPT="${JAVA_OPT} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=30m"
+JAVA_OPT="${JAVA_OPT} -XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSClassUnloadingEnabled -XX:SurvivorRatio=8  -XX:-UseParNewGC"
+JAVA_OPT="${JAVA_OPT} -verbose:gc -Xloggc:/dev/shm/rmq_srv_gc.log -XX:+PrintGCDetails"
 JAVA_OPT="${JAVA_OPT} -XX:-OmitStackTraceInFastThrow"
-JAVA_OPT="${JAVA_OPT} -XX:+AlwaysPreTouch"
-JAVA_OPT="${JAVA_OPT} -XX:MaxDirectMemorySize=${MaxDirectMemorySize}"
-JAVA_OPT="${JAVA_OPT} -XX:-UseLargePages -XX:-UseBiasedLocking"
+JAVA_OPT="${JAVA_OPT} -XX:-UseLargePages"
 JAVA_OPT="${JAVA_OPT} -Djava.ext.dirs=${JAVA_HOME}/jre/lib/ext:${BASE_DIR}/lib"
 #JAVA_OPT="${JAVA_OPT} -Xdebug -Xrunjdwp:transport=dt_socket,address=9555,server=y,suspend=n"
 JAVA_OPT="${JAVA_OPT} ${JAVA_OPT_EXT}"
 JAVA_OPT="${JAVA_OPT} -cp ${CLASSPATH}"
 
-numactl --interleave=all pwd > /dev/null 2>&1
-if [ $? -eq 0 ]
-then
-	if [ -z "$RMQ_NUMA_NODE" ] ; then
-		numactl --interleave=all $JAVA ${JAVA_OPT} $@
-	else
-		numactl --cpunodebind=$RMQ_NUMA_NODE --membind=$RMQ_NUMA_NODE $JAVA ${JAVA_OPT} $@
-	fi
-else
-	$JAVA ${JAVA_OPT} $@
-fi
+$JAVA ${JAVA_OPT} $@
