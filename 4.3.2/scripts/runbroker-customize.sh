@@ -71,10 +71,10 @@ then
 fi
 
 # Dynamically calculate parameters, for reference.
-Xms=$MAX_POSSIBLE_HEAP
+Xms=$((MAX_POSSIBLE_HEAP/4))
 Xmx=$MAX_POSSIBLE_HEAP
 Xmn=$((MAX_POSSIBLE_HEAP/2))
-MaxDirectMemorySize=$MAX_POSSIBLE_HEAP
+MaxDirectMemorySize=$((MAX_POSSIBLE_HEAP/8))
 # Set for `JAVA_OPT`.
 JAVA_OPT="${JAVA_OPT} -server -Xms${Xms} -Xmx${Xmx} -Xmn${Xmn}"
 JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8"
